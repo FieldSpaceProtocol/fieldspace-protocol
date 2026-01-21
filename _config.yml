@@ -3,8 +3,8 @@
 
 title: FieldSpace Protocol
 description: An open protocol for exposing content and interactivity across screen environments
-baseurl: ""
-url: "https://fieldspaceprotocol.github.io/fieldspace-protocol"
+baseurl: "/fieldspace-protocol"
+url: "https://fieldspaceprotocol.github.io"
 
 # Theme
 remote_theme: just-the-docs/just-the-docs@v0.10.0
