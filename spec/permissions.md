@@ -21,7 +21,7 @@ nav_order: 6
 
 ## Overview
 
-FieldSpace defines a permission model that governs what users and agents can do with provider capabilities. The model prioritizes consumer safety and predictable behavior.
+FieldSpace defines a permission model that governs what users and agents can do with channel capabilities. The model prioritizes consumer safety and predictable behavior.
 
 ---
 
@@ -31,7 +31,7 @@ FieldSpace defines a permission model that governs what users and agents can do 
 |-------|-------------|
 | **User** | Human interacting with the client |
 | **Agent** | AI companion operating at protocol level |
-| **Provider** | External service exposing capabilities |
+| **Channel** | External service exposing capabilities |
 | **Client** | Platform mediating all interactions |
 
 ---
@@ -78,8 +78,8 @@ Users have the highest permission level. They can:
 
 - Invoke any action marked `user: allowed`
 - Confirm and invoke actions marked `user: confirmation_required`
-- Override agent permissions per-provider
-- Grant or revoke provider access
+- Override agent permissions per-channel
+- Grant or revoke channel access
 
 Users **cannot**:
 
@@ -94,7 +94,7 @@ Agents operate under the **principle of least surprise**:
 
 ### Agents CAN
 
-1. **Observe freely**: Read all provider state at any time
+1. **Observe freely**: Read all channel state at any time
 2. **Suggest freely**: Recommend actions to users
 3. **Act with permission**: Invoke actions marked `agent: allowed`
 4. **Request confirmation**: Trigger confirmation for `agent: confirmation_required`
@@ -102,15 +102,15 @@ Agents operate under the **principle of least surprise**:
 ### Agents CANNOT
 
 1. Invoke actions marked `agent: forbidden`
-2. Bypass provider-declared restrictions
+2. Bypass channel-declared restrictions
 3. Act without user awareness (actions are logged)
 4. Access capabilities marked `agent_visible: false`
 
 ### Agent Permission Hierarchy
 
 ```
-User grants agent access to provider
-  └─ Provider declares action permissions
+User grants agent access to channel
+  └─ Channel declares action permissions
        └─ User may further restrict agent
             └─ Agent operates within intersection
 ```
@@ -119,12 +119,12 @@ User grants agent access to provider
 
 ## User Overrides
 
-Users can restrict agent permissions beyond provider declarations:
+Users can restrict agent permissions beyond channel declarations:
 
 ```json
 {
   "user_preferences": {
-    "provider_overrides": {
+    "channel_overrides": {
       "com.example.home": {
         "agent_can_observe": true,
         "agent_can_act": false
@@ -139,13 +139,13 @@ Users can restrict agent permissions beyond provider declarations:
 }
 ```
 
-Users **cannot** grant agents more permissions than providers allow.
+Users **cannot** grant agents more permissions than channels allow.
 
 ---
 
-## Read-Only vs Control Providers
+## Read-Only vs Control Channels
 
-### Read-Only Providers
+### Read-Only Channels
 
 Expose only `data` and `state` capabilities:
 
@@ -160,7 +160,7 @@ Expose only `data` and `state` capabilities:
 
 Agents can observe but not act.
 
-### Control Providers
+### Control Channels
 
 Expose `action` and `control` capabilities:
 
@@ -181,7 +181,7 @@ Agents can act within declared permissions.
 
 ## Trust Levels
 
-Providers declare their trust level:
+Channels declare their trust level:
 
 | Level | Description | Verification |
 |-------|-------------|--------------|
@@ -211,7 +211,7 @@ Providers declare their trust level:
 
 ## Contract Stability
 
-Providers make stability guarantees:
+Channels make stability guarantees:
 
 ```json
 {
@@ -235,18 +235,18 @@ Providers make stability guarantees:
 
 ## Security Constraints
 
-### Provider Sandboxing
+### Channel Sandboxing
 
-Providers are sandboxed:
+Channels are sandboxed:
 
-- Cannot access other providers' data
+- Cannot access other channels' data
 - Cannot access client-side storage
 - Cannot execute arbitrary code on client
 - Web views run in restricted iframes
 
 ### Data Minimization
 
-Providers **should**:
+Channels **should**:
 
 - Request only necessary permissions
 - Expose only relevant state
@@ -268,7 +268,7 @@ Clients **should** log:
 
 | Method | Use Case |
 |--------|----------|
-| `none` | Public providers |
+| `none` | Public channels |
 | `api_key` | Simple authentication |
 | `bearer` | Token-based auth |
 | `oauth2` | User-authorized access |
@@ -281,8 +281,8 @@ Clients **should** log:
     "required": true,
     "methods": ["oauth2"],
     "oauth2": {
-      "authorization_url": "https://provider.example.com/oauth/authorize",
-      "token_url": "https://provider.example.com/oauth/token",
+      "authorization_url": "https://channel.example.com/oauth/authorize",
+      "token_url": "https://channel.example.com/oauth/token",
       "scopes": {
         "read": "Read content",
         "write": "Modify content",

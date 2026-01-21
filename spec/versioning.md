@@ -21,7 +21,7 @@ nav_order: 7
 
 ## Overview
 
-FieldSpace uses semantic versioning for both the protocol and provider implementations. This document specifies versioning rules and compatibility expectations.
+FieldSpace uses semantic versioning for both the protocol and channel implementations. This document specifies versioning rules and compatibility expectations.
 
 ---
 
@@ -49,14 +49,14 @@ The `0.x` series indicates pre-release status. Breaking changes may occur in min
 
 ---
 
-## Provider Versioning
+## Channel Versioning
 
-Providers declare their version independently:
+Channels declare their version independently:
 
 ```json
 {
   "fieldspace": "0.1",
-  "provider": {
+  "channel": {
     "id": "com.example.media",
     "version": "2.3.1"
   }
@@ -65,7 +65,7 @@ Providers declare their version independently:
 
 ### Protocol Compatibility
 
-Providers declare supported protocol versions:
+Channels declare supported protocol versions:
 
 ```json
 {
@@ -104,11 +104,11 @@ Protocol breaking changes:
 3. Support previous major version for 12 months minimum
 4. Announce 6 months before deprecation
 
-### Provider Breaking Changes
+### Channel Breaking Changes
 
-Provider breaking changes:
+Channel breaking changes:
 
-1. Increment provider MAJOR version
+1. Increment channel MAJOR version
 2. Update manifest with new version
 3. Maintain previous version endpoints if possible
 4. Notify clients via manifest change
@@ -123,12 +123,12 @@ Clients **must**:
 
 - Ignore unknown fields in responses
 - Handle missing optional fields gracefully
-- Support providers using older protocol versions (within reason)
+- Support channels using older protocol versions (within reason)
 - Degrade gracefully for unsupported features
 
-### Provider Requirements
+### Channel Requirements
 
-Providers **should**:
+Channels **should**:
 
 - Maintain backward compatibility within major versions
 - Deprecate before removing
@@ -153,9 +153,9 @@ Providers **should**:
 }
 ```
 
-### Provider Deprecation
+### Channel Deprecation
 
-Providers signal deprecation in manifests:
+Channels signal deprecation in manifests:
 
 ```json
 {
@@ -179,7 +179,7 @@ Providers signal deprecation in manifests:
 
 ### Discovery
 
-Clients discover provider protocol version from manifest:
+Clients discover channel protocol version from manifest:
 
 ```http
 GET /.well-known/fieldspace
@@ -188,7 +188,7 @@ GET /.well-known/fieldspace
 ```json
 {
   "fieldspace": "0.1",
-  "provider": { ... }
+  "channel": { ... }
 }
 ```
 
@@ -196,7 +196,7 @@ GET /.well-known/fieldspace
 
 ```
 Client supports: 0.1 - 0.x
-Provider requires: 0.1 minimum
+Channel requires: 0.1 minimum
 
 0.1 >= 0.1 ✓ Compatible
 ```
@@ -206,7 +206,7 @@ Provider requires: 0.1 minimum
 When versions are incompatible:
 
 1. Client displays clear error to user
-2. Client suggests provider update (if provider is older)
+2. Client suggests channel update (if channel is older)
 3. Client suggests client update (if client is older)
 4. No silent failures
 
@@ -234,7 +234,7 @@ if (manifest.fieldspace >= '0.2') {
 
 ### Cache Headers
 
-Providers **should** include cache headers:
+Channels **should** include cache headers:
 
 ```http
 Cache-Control: max-age=3600

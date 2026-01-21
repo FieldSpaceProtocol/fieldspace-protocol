@@ -1,6 +1,6 @@
 {
   "fieldspace": "0.1",
-  "provider": {
+  "channel": {
     "id": "com.example.video-feed",
     "name": "Video Feed",
     "description": "Personal video subscriptions and recommendations",

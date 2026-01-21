@@ -1,6 +1,6 @@
 {
   "fieldspace": "0.1",
-  "provider": {
+  "channel": {
     "id": "com.example.smart-lights",
     "name": "Smart Lights",
     "description": "Control smart lighting throughout your home",

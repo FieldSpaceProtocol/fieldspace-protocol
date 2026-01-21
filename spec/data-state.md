@@ -21,13 +21,13 @@ nav_order: 3
 
 ## Overview
 
-FieldSpace providers expose data and state through HTTP endpoints. This document specifies the requirements for data access, state inspection, and real-time updates.
+FieldSpace channels expose data and state through HTTP endpoints. This document specifies the requirements for data access, state inspection, and real-time updates.
 
 ---
 
 ## Data Endpoints
 
-Data endpoints serve read-only content. They are the primary mechanism for providers to expose collections and items.
+Data endpoints serve read-only content. They are the primary mechanism for channels to expose collections and items.
 
 ### Request Format
 
@@ -61,7 +61,7 @@ Paginated endpoints **must** support:
 | `per_page` | integer | Items per page (max 100) |
 | `cursor` | string | Opaque cursor for cursor-based pagination |
 
-Providers **should** prefer cursor-based pagination for large datasets.
+Channels **should** prefer cursor-based pagination for large datasets.
 
 ### Filtering
 
@@ -91,7 +91,7 @@ GET /api/videos?q=cooking+tutorial
 
 ## State Endpoints
 
-State endpoints expose the provider's current condition. Unlike data endpoints, state represents mutable, real-time information.
+State endpoints expose the channel's current condition. Unlike data endpoints, state represents mutable, real-time information.
 
 ### Request Format
 
@@ -105,7 +105,7 @@ Authorization: Bearer <token>
 
 ```json
 {
-  "provider_id": "com.example.media",
+  "channel_id": "com.example.media",
   "timestamp": "2026-01-21T10:30:00Z",
   "state": {
     "playback": {
@@ -124,10 +124,10 @@ Authorization: Bearer <token>
 
 ### Scoped State
 
-Providers may expose state at different scopes:
+Channels may expose state at different scopes:
 
 ```http
-GET /api/state                    # Full provider state
+GET /api/state                    # Full channel state
 GET /api/state/playback           # Playback state only
 GET /api/state/queue              # Queue state only
 ```
@@ -136,7 +136,7 @@ GET /api/state/queue              # Queue state only
 
 ## Real-Time Updates
 
-Providers **may** support real-time state updates via Server-Sent Events (SSE) or WebSocket.
+Channels **may** support real-time state updates via Server-Sent Events (SSE) or WebSocket.
 
 ### Server-Sent Events (Recommended)
 
@@ -158,7 +158,7 @@ data: {"playback":{"position_seconds":144}}
 ### WebSocket (Optional)
 
 ```
-ws://provider.example.com/api/state/ws
+ws://channel.example.com/api/state/ws
 ```
 
 Message format:
@@ -174,7 +174,7 @@ Message format:
 
 ### Polling Fallback
 
-When real-time updates are unavailable, clients **must** fall back to polling. Providers declare recommended intervals:
+When real-time updates are unavailable, clients **must** fall back to polling. Channels declare recommended intervals:
 
 ```json
 {
@@ -200,7 +200,7 @@ All data and state endpoints use `GET` requests, which are:
 
 ### Cache Control
 
-Providers **should** include appropriate cache headers:
+Channels **should** include appropriate cache headers:
 
 ```http
 Cache-Control: max-age=60, stale-while-revalidate=300
@@ -242,8 +242,8 @@ If-None-Match: "abc123"
 | 403 | `forbidden` | Insufficient permissions |
 | 404 | `not_found` | Resource not found |
 | 429 | `rate_limited` | Too many requests |
-| 500 | `internal_error` | Provider error |
-| 503 | `unavailable` | Provider temporarily unavailable |
+| 500 | `internal_error` | Channel error |
+| 503 | `unavailable` | Channel temporarily unavailable |
 
 ---
 
@@ -259,7 +259,7 @@ Accept: application/json
 
 ### Response
 
-Providers **must** respond with:
+Channels **must** respond with:
 
 ```http
 Content-Type: application/json; charset=utf-8

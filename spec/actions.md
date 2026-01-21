@@ -21,13 +21,13 @@ nav_order: 4
 
 ## Overview
 
-Actions are explicit, named operations that can be invoked on a provider. Unlike data and state endpoints (which are read-only), actions cause changes.
+Actions are explicit, named operations that can be invoked on a channel. Unlike data and state endpoints (which are read-only), actions cause changes.
 
 ---
 
 ## Action Declaration
 
-Actions are declared as capabilities in the provider manifest:
+Actions are declared as capabilities in the channel manifest:
 
 ```json
 {
@@ -112,12 +112,12 @@ Authorization: Bearer <token>
 
 ## Side Effect Declarations
 
-Providers **must** declare the side effect scope of each action:
+Channels **must** declare the side effect scope of each action:
 
 | Value | Description | Example |
 |-------|-------------|---------|
 | `none` | No side effects (query-like action) | Search, calculate |
-| `local` | Affects provider state only | Play, pause, seek |
+| `local` | Affects channel state only | Play, pause, seek |
 | `external` | Affects external systems | Post to social media, send email |
 | `destructive` | Irreversible changes | Delete, purchase |
 
@@ -200,7 +200,7 @@ Actions can be hidden from agents or made agent-only:
 
 ## Idempotency
 
-Actions **should** be idempotent where semantically appropriate. Providers **may** require idempotency keys:
+Actions **should** be idempotent where semantically appropriate. Channels **may** require idempotency keys:
 
 ```http
 POST /api/actions/add_to_queue
@@ -212,7 +212,7 @@ Content-Type: application/json
 }
 ```
 
-Providers **must** return the same response for duplicate requests with the same idempotency key.
+Channels **must** return the same response for duplicate requests with the same idempotency key.
 
 ---
 
@@ -232,13 +232,13 @@ Clients **may** include context with action invocations:
 }
 ```
 
-Providers **should** log context for debugging but **must not** require it.
+Channels **should** log context for debugging but **must not** require it.
 
 ---
 
 ## Batch Actions
 
-Providers **may** support batch action invocation:
+Channels **may** support batch action invocation:
 
 ```http
 POST /api/actions/batch
@@ -280,7 +280,7 @@ The following action identifiers are reserved for common operations:
 | `search` | Search content |
 | `refresh` | Refresh data |
 
-Providers **should** use these identifiers for matching functionality.
+Channels **should** use these identifiers for matching functionality.
 
 ---
 

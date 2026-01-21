@@ -21,9 +21,9 @@ nav_order: 2
 
 ## Overview
 
-Capabilities are the fundamental unit of provider functionality in FieldSpace. A capability is a declared feature that a provider exposes to clients and agents.
+Capabilities are the fundamental unit of channel functionality in FieldSpace. A capability is a declared feature that a channel exposes to clients and agents.
 
-Providers **must** declare all capabilities in their manifest. Undeclared capabilities do not exist from the protocol's perspective.
+Channels **must** declare all capabilities in their manifest. Undeclared capabilities do not exist from the protocol's perspective.
 
 ---
 
@@ -53,7 +53,7 @@ Read-only content retrieval. Data capabilities expose collections or items that 
 
 ### `state`
 
-Inspectable current condition. State capabilities expose the provider's current state that clients and agents can observe.
+Inspectable current condition. State capabilities expose the channel's current state that clients and agents can observe.
 
 ```json
 {
@@ -180,14 +180,14 @@ Metadata provides hints about capability behavior and characteristics.
 
 ## Agent Discovery and Reasoning
 
-Agents discover capabilities by reading the provider manifest. The manifest provides sufficient information for agents to:
+Agents discover capabilities by reading the channel manifest. The manifest provides sufficient information for agents to:
 
 ### 1. Understand What's Available
 
-Agents enumerate capabilities by type to understand provider functionality:
+Agents enumerate capabilities by type to understand channel functionality:
 
 ```
-Provider "com.example.media" offers:
+Channel "com.example.media" offers:
 - data: videos, playlists
 - state: playback_state, queue
 - action: play, pause, skip, search
@@ -230,7 +230,7 @@ Agent plan:
 
 ## Capability Namespacing
 
-Standard capabilities use simple identifiers. Provider-specific capabilities should use namespaced identifiers:
+Standard capabilities use simple identifiers. Channel-specific capabilities should use namespaced identifiers:
 
 ```json
 {
@@ -246,12 +246,12 @@ Standard capabilities use simple identifiers. Provider-specific capabilities sho
 
 ## Required vs Optional Capabilities
 
-No specific capabilities are required by the protocol. However, providers **should** expose:
+No specific capabilities are required by the protocol. However, channels **should** expose:
 
 - At least one `data` or `state` capability (otherwise there's nothing to display)
 - Appropriate `action` capabilities for any interactive features
 
-Clients **must** gracefully handle providers with minimal capabilities.
+Clients **must** gracefully handle channels with minimal capabilities.
 
 ---
 

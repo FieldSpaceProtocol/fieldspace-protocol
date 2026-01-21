@@ -21,7 +21,7 @@ nav_order: 5
 
 ## Overview
 
-Views are an **optional, advisory** layer in FieldSpace. Providers may suggest how their content should be rendered, but clients are free to ignore these suggestions.
+Views are an **optional, advisory** layer in FieldSpace. Channels may suggest how their content should be rendered, but clients are free to ignore these suggestions.
 
 **Critical principle**: Views are non-authoritative. Clients own the rendering surface.
 
@@ -32,14 +32,14 @@ Views are an **optional, advisory** layer in FieldSpace. Providers may suggest h
 1. **Platform constraints**: tvOS cannot render web views; clients must adapt
 2. **User preferences**: Users may prefer different layouts or themes
 3. **Accessibility**: Clients may need to override views for accessibility
-4. **Consistency**: Clients maintain visual consistency across providers
+4. **Consistency**: Clients maintain visual consistency across channels
 5. **Agent operation**: Agents operate on data/state, not views
 
 ---
 
 ## View Declaration
 
-Providers declare view hints in their manifest:
+Channels declare view hints in their manifest:
 
 ```json
 {
@@ -67,7 +67,7 @@ Providers declare view hints in their manifest:
 
 ### Template Views
 
-Providers suggest templates; clients render using their own implementations:
+Channels suggest templates; clients render using their own implementations:
 
 ```json
 {
@@ -91,12 +91,12 @@ Standard template types:
 
 ### Web Views (Non-Guaranteed)
 
-Providers may offer web-based rendering:
+Channels may offer web-based rendering:
 
 ```json
 {
   "web_view": {
-    "url": "https://provider.example.com/embed",
+    "url": "https://channel.example.com/embed",
     "sandbox": ["allow-scripts", "allow-same-origin"],
     "communication": "postMessage",
     "fallback": "default"
@@ -110,11 +110,11 @@ Providers may offer web-based rendering:
 - Some clients may disable web views for security
 - Users may prefer native rendering
 
-Providers **must** declare a fallback for when web views are unavailable.
+Channels **must** declare a fallback for when web views are unavailable.
 
 ### Native View Hints
 
-Providers may include platform-specific hints:
+Channels may include platform-specific hints:
 
 ```json
 {
@@ -142,29 +142,29 @@ Providers may include platform-specific hints:
 
 ### Clients MAY
 
-- Use provider view hints as suggestions
-- Render content using provider-suggested templates
+- Use channel view hints as suggestions
+- Render content using channel-suggested templates
 - Load web views when available and appropriate
 - Apply native hints for platform optimization
 
 ### Clients MAY NOT
 
-- Be required to render provider views exactly as specified
+- Be required to render channel views exactly as specified
 - Be required to support web views
-- Allow providers to break out of their pane boundaries
+- Allow channels to break out of their pane boundaries
 
 ### Clients MUST
 
-- Render provider content even without view hints
+- Render channel content even without view hints
 - Fall back gracefully when preferred views are unavailable
 - Maintain control of system chrome and navigation
-- Expose provider state regardless of view rendering
+- Expose channel state regardless of view rendering
 
 ---
 
 ## View State Synchronization
 
-When using web views, providers must synchronize state via the protocol:
+When using web views, channels must synchronize state via the protocol:
 
 ```
 ┌─────────────────────────────────────────┐
@@ -172,7 +172,7 @@ When using web views, providers must synchronize state via the protocol:
 │  ┌─────────────────────────────────┐    │
 │  │         Web View (iframe)        │    │
 │  │  ┌─────────────────────────┐    │    │
-│  │  │   Provider UI           │    │    │
+│  │  │   Channel UI           │    │    │
 │  │  └───────────┬─────────────┘    │    │
 │  └──────────────┼──────────────────┘    │
 │                 │ postMessage            │
@@ -194,7 +194,7 @@ The web view **must not** be the only source of state. State must be accessible 
 
 ## Focus Hints
 
-For remote-controlled environments, providers may declare focus behavior:
+For remote-controlled environments, channels may declare focus behavior:
 
 ```json
 {
@@ -215,20 +215,20 @@ Clients use these hints to manage focus but may override them.
 
 Views map to rendering tiers (defined by clients like ScreenSpace):
 
-| Tier | View Type | Client Control | Provider Control |
+| Tier | View Type | Client Control | Channel Control |
 |------|-----------|----------------|------------------|
 | 0 | Data only | Full | None |
 | 1 | Template hints | High | Low (hints only) |
 | 2 | Web view | Medium | Medium (bounded) |
 | 3 | Native passthrough | Low | High (media only) |
 
-Providers declare preferred tier; clients select based on platform capabilities.
+Channels declare preferred tier; clients select based on platform capabilities.
 
 ---
 
 ## View Versioning
 
-View schemas may evolve. Providers declare supported versions:
+View schemas may evolve. Channels declare supported versions:
 
 ```json
 {

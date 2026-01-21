@@ -1,6 +1,6 @@
 {
   "fieldspace": "0.1",
-  "provider": {
+  "channel": {
     "id": "com.example.media-catalogue",
     "name": "Media Catalogue",
     "description": "Read-only library of curated media content",

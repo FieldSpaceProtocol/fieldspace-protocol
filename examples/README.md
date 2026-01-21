@@ -30,9 +30,9 @@ This directory contains complete, valid FieldSpace manifests that can be used as
 | [media-catalogue.json](./media-catalogue.json) | Read-only media library | Data only |
 | [smart-lights.json](./smart-lights.json) | Controllable smart lighting | State, actions, controls |
 
-## Video Feed Provider
+## Video Feed Channel
 
-A full-featured media provider demonstrating:
+A full-featured media channel demonstrating:
 
 - Multiple data feeds (subscriptions, recommended, trending)
 - Playback state management
@@ -40,18 +40,18 @@ A full-featured media provider demonstrating:
 - Agent-friendly capability declarations
 - Platform-specific view hints
 
-## Media Catalogue Provider
+## Media Catalogue Channel
 
-A minimal read-only provider demonstrating:
+A minimal read-only channel demonstrating:
 
 - Simple data exposure
 - No actions or controls
 - Agent observation without action
 - Graceful minimal implementation
 
-## Smart Lights Provider
+## Smart Lights Channel
 
-A stateful control provider demonstrating:
+A stateful control channel demonstrating:
 
 - Device state exposure
 - Control capabilities (brightness, color)
@@ -60,5 +60,5 @@ A stateful control provider demonstrating:
 
 ---
 
-These examples are valid FieldSpace manifests that can be used as templates for new providers.
+These examples are valid FieldSpace manifests that can be used as templates for new channels.
 

@@ -23,7 +23,7 @@ nav_order: 1
 
 ```
 FieldSpace (protocol)
-  └─ Provider (external service)
+  └─ Channel (external service)
        └─ Capability (declared function)
             ├─ Data (read-only content)
             ├─ State (inspectable condition)
@@ -33,7 +33,7 @@ Client (e.g., ScreenSpace)
   └─ Space (persistent container)
        └─ Screen (logical display)
             └─ Pane / Frame (content region)
-                 └─ Provider Binding (connection)
+                 └─ Channel Binding (connection)
 ```
 
 ---
@@ -42,16 +42,16 @@ Client (e.g., ScreenSpace)
 
 ### FieldSpace
 
-The protocol itself. FieldSpace defines how providers expose capabilities and how clients consume them. The protocol is:
+The protocol itself. FieldSpace defines how channels expose capabilities and how clients consume them. The protocol is:
 
-- **Declarative**: Providers describe what they can do
-- **Stateful**: Providers maintain and expose current state
+- **Declarative**: Channels describe what they can do
+- **Stateful**: Channels maintain and expose current state
 - **Capability-driven**: Clients and agents reason over declared capabilities
-- **Rendering-agnostic**: Providers may suggest but do not control presentation
+- **Rendering-agnostic**: Channels may suggest but do not control presentation
 
-### Provider
+### Channel
 
-An external service that implements the FieldSpace protocol. A provider:
+An external service that implements the FieldSpace protocol. A channel:
 
 - Exposes a **manifest** describing its identity and capabilities
 - Serves **data** through declared endpoints
@@ -59,11 +59,11 @@ An external service that implements the FieldSpace protocol. A provider:
 - Accepts **action** invocations
 - Optionally provides **view hints** for rendering
 
-Providers are identified by reverse-domain identifiers (e.g., `com.example.weather`).
+Channels are identified by reverse-domain identifiers (e.g., `com.example.weather`).
 
 ### Capability
 
-A declared function or feature that a provider exposes. Capabilities are typed:
+A declared function or feature that a channel exposes. Capabilities are typed:
 
 | Type | Description | Example |
 |------|-------------|---------|
@@ -75,7 +75,7 @@ A declared function or feature that a provider exposes. Capabilities are typed:
 
 ### Action
 
-An explicit, named operation that can be invoked on a provider. Actions:
+An explicit, named operation that can be invoked on a channel. Actions:
 
 - Have declared **inputs** (parameters) and **outputs** (results)
 - Declare **side effects** (none, local, external)
@@ -84,20 +84,20 @@ An explicit, named operation that can be invoked on a provider. Actions:
 
 ### State
 
-The current condition of a provider or capability. State:
+The current condition of a channel or capability. State:
 
 - Is **inspectable** by clients and agents at any time
 - Is **structured** according to a declared schema
 - May be **subscribed to** for real-time updates
-- Is **provider-authoritative** (clients cache but don't own)
+- Is **channel-authoritative** (clients cache but don't own)
 
 ### View (Optional)
 
-An advisory rendering suggestion from a provider. Views:
+An advisory rendering suggestion from a channel. Views:
 
 - Are **non-authoritative**: clients may ignore them
 - Are **platform-specific**: web, tvOS, mobile hints
-- Are **fallback-capable**: providers declare degradation paths
+- Are **fallback-capable**: channels declare degradation paths
 - Do **not replace** data/state exposure requirements
 
 ---
@@ -126,17 +126,17 @@ A logical display surface within a space. A screen:
 
 ### Pane / Frame
 
-A bounded region of a screen that displays content from a single provider binding. Panes:
+A bounded region of a screen that displays content from a single channel binding. Panes:
 
 - Have position and size within a screen
 - Receive focus for navigation
-- Connect to exactly one provider binding
+- Connect to exactly one channel binding
 
-### Provider Binding
+### Channel Binding
 
-A configured connection between a pane and a provider instance. A binding includes:
+A configured connection between a pane and a channel instance. A binding includes:
 
-- Provider identifier
+- Channel identifier
 - Authentication credentials (if required)
 - Instance-specific configuration
 - Current state cache
@@ -150,26 +150,26 @@ A configured connection between a pane and a provider instance. A binding includ
 A human interacting with the client. Users:
 
 - Have full control within their permissions
-- Can override agent permissions per-provider
-- Authenticate with providers via the client
+- Can override agent permissions per-channel
+- Authenticate with channels via the client
 
 ### Agent
 
 An AI companion that operates at the protocol level. Agents:
 
-- **Observe**: Read state from all providers freely
+- **Observe**: Read state from all channels freely
 - **Reason**: Understand capabilities and context
 - **Suggest**: Recommend actions to users
 - **Act**: Invoke actions (with declared permissions)
 
 Agents operate on **structured protocol data**, not pixels. They never need to "see" the screen.
 
-### Provider (as actor)
+### Channel (as actor)
 
-The external service. Providers:
+The external service. Channels:
 
 - Expose capabilities to clients and agents
-- Cannot act on other providers
+- Cannot act on other channels
 - Cannot access client-side state directly
 
 ### Client System
@@ -177,7 +177,7 @@ The external service. Providers:
 The platform itself (e.g., ScreenSpace). The client:
 
 - Manages sessions, layout, navigation
-- Mediates all provider communication
+- Mediates all channel communication
 - Enforces permission policies
 - Owns the rendering surface
 
@@ -188,25 +188,25 @@ The platform itself (e.g., ScreenSpace). The client:
 ### 1. Protocol Boundary
 
 Everything above the protocol boundary is the client's responsibility.
-Everything below is the provider's responsibility.
+Everything below is the channel's responsibility.
 Agents operate at the protocol level, not the pixel level.
 
 ### 2. State Exposure Requirement
 
-Even providers with custom rendering **must** expose semantic state via the protocol. This enables:
+Even channels with custom rendering **must** expose semantic state via the protocol. This enables:
 
 - Agent understanding without vision
-- Cross-provider reasoning
+- Cross-channel reasoning
 - Session persistence and resume
 - Accessibility
 
 ### 3. Capability Declaration
 
-Providers declare what they can do. Clients and agents discover and reason over these declarations. Undeclared capabilities do not exist.
+Channels declare what they can do. Clients and agents discover and reason over these declarations. Undeclared capabilities do not exist.
 
 ### 4. Consumer Safety
 
-The protocol is designed for home, family, and public environments. Providers must:
+The protocol is designed for home, family, and public environments. Channels must:
 
 - Declare side effects honestly
 - Respect permission boundaries
@@ -225,7 +225,7 @@ The protocol supports the full spectrum of interaction models:
 | Voice assistant | Voice commands | Agent-mediated |
 | Signage | None or touch | Configurable |
 
-Providers declare capabilities; clients adapt interaction based on surface capabilities. A provider that works on a TV remote also works with full touch—the client mediates.
+Channels declare capabilities; clients adapt interaction based on surface capabilities. A channel that works on a TV remote also works with full touch—the client mediates.
 
 ---
 

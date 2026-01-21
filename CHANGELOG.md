@@ -19,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - View layer specification (`views.md`)
 - Permission model (`permissions.md`)
 - Versioning guidelines (`versioning.md`)
-- JSON Schema for provider manifests (`manifest.schema.json`)
-- Example provider manifests:
+- JSON Schema for channel manifests (`manifest.schema.json`)
+- Example channel manifests:
   - Media Catalogue (`examples/media-catalogue.json`)
   - Smart Lights (`examples/smart-lights.json`)
   - Video Feed (`examples/video-feed.json`)

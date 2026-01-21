@@ -1,10 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://fieldspace.dev/schema/manifest/0.1.json",
-  "title": "FieldSpace Provider Manifest",
-  "description": "Schema for FieldSpace provider manifest documents",
+  "title": "FieldSpace Channel Manifest",
+  "description": "Schema for FieldSpace channel manifest documents",
   "type": "object",
-  "required": ["fieldspace", "provider", "capabilities"],
+  "required": ["fieldspace", "channel", "capabilities"],
   "properties": {
     "fieldspace": {
       "type": "string",
@@ -12,41 +12,41 @@
       "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
       "examples": ["0.1", "0.1.0", "1.0"]
     },
-    "provider": {
+    "channel": {
       "type": "object",
-      "description": "Provider identity and metadata",
+      "description": "Channel identity and metadata",
       "required": ["id", "name"],
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique provider identifier (reverse-domain)",
+          "description": "Unique channel identifier (reverse-domain)",
           "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9-]*)+$",
-          "examples": ["com.example.weather", "io.github.user.provider"]
+          "examples": ["com.example.weather", "io.github.user.channel"]
         },
         "name": {
           "type": "string",
-          "description": "Human-readable provider name",
+          "description": "Human-readable channel name",
           "maxLength": 64
         },
         "description": {
           "type": "string",
-          "description": "Brief description of provider functionality",
+          "description": "Brief description of channel functionality",
           "maxLength": 256
         },
         "version": {
           "type": "string",
-          "description": "Provider version (semver)",
+          "description": "Channel version (semver)",
           "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?$"
         },
         "icon_url": {
           "type": "string",
           "format": "uri",
-          "description": "URL to provider icon (PNG, 512x512 recommended)"
+          "description": "URL to channel icon (PNG, 512x512 recommended)"
         },
         "homepage_url": {
           "type": "string",
           "format": "uri",
-          "description": "Provider homepage or documentation URL"
+          "description": "Channel homepage or documentation URL"
         },
         "support_url": {
           "type": "string",
@@ -57,7 +57,7 @@
     },
     "capabilities": {
       "type": "array",
-      "description": "List of provider capabilities",
+      "description": "List of channel capabilities",
       "items": { "$ref": "#/$defs/capability" },
       "minItems": 1
     },
@@ -146,7 +146,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "description": "Capability identifier (unique within provider)",
+          "description": "Capability identifier (unique within channel)",
           "pattern": "^[a-z][a-z0-9_]*$"
         },
         "type": {
