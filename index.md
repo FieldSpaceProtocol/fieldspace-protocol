@@ -3,6 +3,8 @@ layout: default
 title: Home
 nav_order: 1
 permalink: /
+description: "FieldSpace is an open protocol for exposing content and interactivity across screen environments—TVs, tablets, phones, desktops, and signage."
+image: /assets/images/social-card.png
 ---
 
 # FieldSpace Protocol

@@ -1,0 +1,73 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#1a1a2e"/>
+  
+  <!-- Gradient overlay -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#16213e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grad1)"/>
+  
+  <!-- Decorative grid pattern -->
+  <g opacity="0.1">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#fff" stroke-width="1"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#fff" stroke-width="1"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#fff" stroke-width="1"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#fff" stroke-width="1"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#fff" stroke-width="1"/>
+    <line x1="200" y1="0" x2="200" y2="630" stroke="#fff" stroke-width="1"/>
+    <line x1="400" y1="0" x2="400" y2="630" stroke="#fff" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="#fff" stroke-width="1"/>
+    <line x1="800" y1="0" x2="800" y2="630" stroke="#fff" stroke-width="1"/>
+    <line x1="1000" y1="0" x2="1000" y2="630" stroke="#fff" stroke-width="1"/>
+  </g>
+  
+  <!-- Accent bar -->
+  <rect x="0" y="0" width="8" height="630" fill="url(#accent)"/>
+  
+  <!-- Icon: stylized screens/surfaces -->
+  <g transform="translate(100, 180)">
+    <!-- Large screen -->
+    <rect x="0" y="0" width="180" height="120" rx="8" fill="none" stroke="#4f46e5" stroke-width="3"/>
+    <rect x="10" y="10" width="160" height="100" rx="4" fill="#4f46e5" fill-opacity="0.2"/>
+    
+    <!-- Medium screen -->
+    <rect x="200" y="30" width="100" height="140" rx="6" fill="none" stroke="#7c3aed" stroke-width="3"/>
+    <rect x="208" y="38" width="84" height="124" rx="3" fill="#7c3aed" fill-opacity="0.2"/>
+    
+    <!-- Small screen -->
+    <rect x="320" y="80" width="60" height="90" rx="4" fill="none" stroke="#a78bfa" stroke-width="2"/>
+    <rect x="326" y="86" width="48" height="78" rx="2" fill="#a78bfa" fill-opacity="0.2"/>
+    
+    <!-- Connection lines -->
+    <path d="M180 60 L200 75" stroke="#4f46e5" stroke-width="2" stroke-dasharray="4 4"/>
+    <path d="M300 100 L320 115" stroke="#7c3aed" stroke-width="2" stroke-dasharray="4 4"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="100" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="#ffffff">
+    FieldSpace
+  </text>
+  <text x="100" y="490" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="400" fill="#a78bfa">
+    Protocol
+  </text>
+  
+  <!-- Tagline -->
+  <text x="100" y="560" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#94a3b8">
+    Open protocol for content &amp; interactivity across screens
+  </text>
+  
+  <!-- Version badge -->
+  <rect x="1020" y="550" width="80" height="32" rx="16" fill="#4f46e5" fill-opacity="0.3"/>
+  <text x="1060" y="572" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#a78bfa" text-anchor="middle">
+    v0.1.0
+  </text>
+</svg>
+

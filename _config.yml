@@ -6,6 +6,26 @@ description: An open protocol for exposing content and interactivity across scre
 baseurl: "/fieldspace-protocol"
 url: "https://fieldspaceprotocol.github.io"
 
+# SEO and Social Sharing
+tagline: "Open protocol for content & interactivity across screens"
+logo: /assets/images/social-card.png
+
+# Open Graph / Twitter Cards
+twitter:
+  card: summary_large_image
+
+social:
+  name: FieldSpace Protocol
+  links:
+    - https://github.com/FieldSpaceProtocol/fieldspace-protocol
+
+# Default image for social sharing
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/images/social-card.png
+
 # Theme
 remote_theme: just-the-docs/just-the-docs@v0.10.0
 color_scheme: light
