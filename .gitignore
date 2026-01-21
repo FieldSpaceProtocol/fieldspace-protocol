@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Jekyll / GitHub Pages
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+
+# Node (if using any build tools)
+node_modules/
+

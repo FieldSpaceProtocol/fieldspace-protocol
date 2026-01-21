@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://fieldspace.dev/schema/manifest/0.1.json",
+  "title": "FieldSpace Provider Manifest",
+  "description": "Schema for FieldSpace provider manifest documents",
+  "type": "object",
+  "required": ["fieldspace", "provider", "capabilities"],
+  "properties": {
+    "fieldspace": {
+      "type": "string",
+      "description": "Protocol version (semver)",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$",
+      "examples": ["0.1", "0.1.0", "1.0"]
+    },
+    "provider": {
+      "type": "object",
+      "description": "Provider identity and metadata",
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique provider identifier (reverse-domain)",
+          "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9-]*)+$",
+          "examples": ["com.example.weather", "io.github.user.provider"]
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable provider name",
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of provider functionality",
+          "maxLength": 256
+        },
+        "version": {
+          "type": "string",
+          "description": "Provider version (semver)",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.]+)?$"
+        },
+        "icon_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to provider icon (PNG, 512x512 recommended)"
+        },
+        "homepage_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Provider homepage or documentation URL"
+        },
+        "support_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Support or contact URL"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "description": "List of provider capabilities",
+      "items": { "$ref": "#/$defs/capability" },
+      "minItems": 1
+    },
+    "authentication": {
+      "type": "object",
+      "description": "Authentication requirements",
+      "properties": {
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["oauth2", "api_key", "bearer", "none"]
+          }
+        },
+        "oauth2": {
+          "type": "object",
+          "properties": {
+            "authorization_url": { "type": "string", "format": "uri" },
+            "token_url": { "type": "string", "format": "uri" },
+            "scopes": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "description": "Supported surface platforms",
+      "items": {
+        "type": "string",
+        "enum": ["web", "tvos", "android_tv", "ios", "android", "desktop", "signage"]
+      },
+      "default": ["web"]
+    },
+    "endpoints": {
+      "type": "object",
+      "description": "Base endpoint configuration",
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Base URL for all endpoints (if not absolute)"
+        },
+        "state": {
+          "type": "string",
+          "description": "State endpoint path",
+          "default": "/state"
+        },
+        "actions": {
+          "type": "string",
+          "description": "Actions endpoint path",
+          "default": "/actions"
+        }
+      }
+    },
+    "trust": {
+      "type": "object",
+      "description": "Trust and verification metadata",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["unverified", "verified", "signed"],
+          "default": "unverified"
+        },
+        "publisher": {
+          "type": "string",
+          "description": "Verified publisher name"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Manifest signature (for signed trust level)"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Capability identifier (unique within provider)",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["data", "state", "action", "control", "status"],
+          "description": "Capability type"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable capability name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Capability description"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint path for this capability"
+        },
+        "metadata": { "$ref": "#/$defs/capability_metadata" },
+        "permissions": { "$ref": "#/$defs/permissions" },
+        "schema": {
+          "type": "object",
+          "description": "JSON Schema for capability data/parameters"
+        }
+      }
+    },
+    "capability_metadata": {
+      "type": "object",
+      "properties": {
+        "searchable": { "type": "boolean", "default": false },
+        "sortable": { "type": "boolean", "default": false },
+        "filterable": { "type": "boolean", "default": false },
+        "paginated": { "type": "boolean", "default": false },
+        "passive": { "type": "boolean", "default": false },
+        "agent_visible": { "type": "boolean", "default": true },
+        "agent_only": { "type": "boolean", "default": false },
+        "refresh_interval_seconds": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string",
+          "enum": ["allowed", "confirmation_required", "forbidden"],
+          "default": "allowed"
+        },
+        "agent": {
+          "type": "string",
+          "enum": ["allowed", "confirmation_required", "forbidden"],
+          "default": "allowed"
+        }
+      }
+    }
+  }
+}
+

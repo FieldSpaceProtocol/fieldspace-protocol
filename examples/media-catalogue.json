@@ -1,0 +1,167 @@
+{
+  "fieldspace": "0.1",
+  "provider": {
+    "id": "com.example.media-catalogue",
+    "name": "Media Catalogue",
+    "description": "Read-only library of curated media content",
+    "version": "1.0.0",
+    "icon_url": "https://catalogue.example.com/icon.png",
+    "homepage_url": "https://catalogue.example.com"
+  },
+  "authentication": {
+    "required": false,
+    "methods": ["none"]
+  },
+  "surfaces": ["web", "tvos", "android_tv", "ios", "android", "signage"],
+  "endpoints": {
+    "base_url": "https://api.catalogue.example.com"
+  },
+  "capabilities": [
+    {
+      "id": "movies",
+      "type": "data",
+      "name": "Movies",
+      "description": "Browse movie catalogue",
+      "endpoint": "/v1/movies",
+      "metadata": {
+        "searchable": true,
+        "sortable": true,
+        "filterable": true,
+        "paginated": true,
+        "refresh_interval_seconds": 3600
+      },
+      "schema": {
+        "type": "array",
+        "items": { "$ref": "#/schemas/movie" }
+      }
+    },
+    {
+      "id": "tv_shows",
+      "type": "data",
+      "name": "TV Shows",
+      "description": "Browse TV series catalogue",
+      "endpoint": "/v1/tv-shows",
+      "metadata": {
+        "searchable": true,
+        "sortable": true,
+        "filterable": true,
+        "paginated": true,
+        "refresh_interval_seconds": 3600
+      },
+      "schema": {
+        "type": "array",
+        "items": { "$ref": "#/schemas/tv_show" }
+      }
+    },
+    {
+      "id": "collections",
+      "type": "data",
+      "name": "Collections",
+      "description": "Curated content collections",
+      "endpoint": "/v1/collections",
+      "metadata": {
+        "paginated": true,
+        "refresh_interval_seconds": 86400
+      },
+      "schema": {
+        "type": "array",
+        "items": { "$ref": "#/schemas/collection" }
+      }
+    },
+    {
+      "id": "featured",
+      "type": "data",
+      "name": "Featured",
+      "description": "Currently featured content",
+      "endpoint": "/v1/featured",
+      "metadata": {
+        "passive": true,
+        "refresh_interval_seconds": 3600
+      }
+    },
+    {
+      "id": "catalogue_status",
+      "type": "status",
+      "name": "Catalogue Status",
+      "description": "Catalogue availability and update status",
+      "endpoint": "/v1/status",
+      "metadata": {
+        "passive": true,
+        "refresh_interval_seconds": 300
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "available": { "type": "boolean" },
+          "total_movies": { "type": "integer" },
+          "total_tv_shows": { "type": "integer" },
+          "last_updated": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  ],
+  "views": {
+    "default": {
+      "type": "grid",
+      "columns": { "compact": 2, "medium": 4, "expanded": 6, "large": 8 },
+      "item_template": "poster_card"
+    },
+    "detail": {
+      "type": "hero_detail",
+      "sections": ["hero", "metadata", "cast", "related"]
+    },
+    "featured": {
+      "type": "carousel",
+      "auto_scroll": true,
+      "interval_seconds": 8
+    }
+  },
+  "schemas": {
+    "movie": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "year": { "type": "integer" },
+        "rating": { "type": "string" },
+        "runtime_minutes": { "type": "integer" },
+        "genres": { "type": "array", "items": { "type": "string" } },
+        "synopsis": { "type": "string" },
+        "poster_url": { "type": "string", "format": "uri" },
+        "backdrop_url": { "type": "string", "format": "uri" },
+        "director": { "type": "string" },
+        "cast": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "tv_show": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "year_start": { "type": "integer" },
+        "year_end": { "type": "integer" },
+        "rating": { "type": "string" },
+        "seasons": { "type": "integer" },
+        "genres": { "type": "array", "items": { "type": "string" } },
+        "synopsis": { "type": "string" },
+        "poster_url": { "type": "string", "format": "uri" },
+        "backdrop_url": { "type": "string", "format": "uri" }
+      }
+    },
+    "collection": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "thumbnail_url": { "type": "string", "format": "uri" },
+        "item_count": { "type": "integer" }
+      }
+    }
+  },
+  "trust": {
+    "level": "verified",
+    "publisher": "Example Media Inc"
+  }
+}
+

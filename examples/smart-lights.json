@@ -1,0 +1,222 @@
+{
+  "fieldspace": "0.1",
+  "provider": {
+    "id": "com.example.smart-lights",
+    "name": "Smart Lights",
+    "description": "Control smart lighting throughout your home",
+    "version": "2.1.0",
+    "icon_url": "https://lights.example.com/icon.png",
+    "homepage_url": "https://lights.example.com",
+    "support_url": "https://lights.example.com/support"
+  },
+  "authentication": {
+    "required": true,
+    "methods": ["oauth2"],
+    "oauth2": {
+      "authorization_url": "https://lights.example.com/oauth/authorize",
+      "token_url": "https://lights.example.com/oauth/token",
+      "scopes": {
+        "read": "View light status",
+        "control": "Control lights"
+      }
+    }
+  },
+  "surfaces": ["web", "tvos", "android_tv", "ios", "android"],
+  "endpoints": {
+    "base_url": "https://api.lights.example.com",
+    "state": "/v1/state",
+    "actions": "/v1/actions"
+  },
+  "capabilities": [
+    {
+      "id": "devices",
+      "type": "data",
+      "name": "Devices",
+      "description": "List of all light devices",
+      "endpoint": "/v1/devices",
+      "metadata": {
+        "filterable": true,
+        "refresh_interval_seconds": 60
+      },
+      "schema": {
+        "type": "array",
+        "items": { "$ref": "#/schemas/device" }
+      }
+    },
+    {
+      "id": "rooms",
+      "type": "data",
+      "name": "Rooms",
+      "description": "Rooms and device groups",
+      "endpoint": "/v1/rooms",
+      "metadata": {
+        "refresh_interval_seconds": 300
+      },
+      "schema": {
+        "type": "array",
+        "items": { "$ref": "#/schemas/room" }
+      }
+    },
+    {
+      "id": "device_states",
+      "type": "state",
+      "name": "Device States",
+      "description": "Current state of all devices",
+      "endpoint": "/v1/state/devices",
+      "metadata": {
+        "refresh_interval_seconds": 5
+      },
+      "schema": {
+        "type": "object",
+        "additionalProperties": { "$ref": "#/schemas/device_state" }
+      }
+    },
+    {
+      "id": "connection_status",
+      "type": "status",
+      "name": "Connection Status",
+      "endpoint": "/v1/status",
+      "metadata": {
+        "passive": true,
+        "refresh_interval_seconds": 30
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "hub_connected": { "type": "boolean" },
+          "devices_online": { "type": "integer" },
+          "devices_offline": { "type": "integer" },
+          "last_sync": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    {
+      "id": "turn_on",
+      "type": "action",
+      "name": "Turn On",
+      "endpoint": "/v1/actions/on",
+      "side_effects": "external",
+      "permissions": { "user": "allowed", "agent": "confirmation_required" },
+      "schema": {
+        "input": {
+          "properties": {
+            "device_id": { "type": "string" },
+            "room_id": { "type": "string" }
+          }
+        }
+      }
+    },
+    {
+      "id": "turn_off",
+      "type": "action",
+      "name": "Turn Off",
+      "endpoint": "/v1/actions/off",
+      "side_effects": "external",
+      "permissions": { "user": "allowed", "agent": "confirmation_required" },
+      "schema": {
+        "input": {
+          "properties": {
+            "device_id": { "type": "string" },
+            "room_id": { "type": "string" }
+          }
+        }
+      }
+    },
+    {
+      "id": "set_scene",
+      "type": "action",
+      "name": "Set Scene",
+      "description": "Apply a predefined lighting scene",
+      "endpoint": "/v1/actions/scene",
+      "side_effects": "external",
+      "permissions": { "user": "allowed", "agent": "confirmation_required" },
+      "schema": {
+        "input": {
+          "properties": {
+            "scene_id": { "type": "string" },
+            "room_id": { "type": "string" }
+          },
+          "required": ["scene_id"]
+        }
+      }
+    },
+    {
+      "id": "brightness",
+      "type": "control",
+      "name": "Brightness",
+      "endpoint": "/v1/controls/brightness",
+      "permissions": { "user": "allowed", "agent": "confirmation_required" },
+      "schema": {
+        "properties": {
+          "device_id": { "type": "string" },
+          "room_id": { "type": "string" },
+          "level": { "type": "integer", "minimum": 0, "maximum": 100 }
+        },
+        "required": ["level"]
+      }
+    },
+    {
+      "id": "color",
+      "type": "control",
+      "name": "Color",
+      "endpoint": "/v1/controls/color",
+      "permissions": { "user": "allowed", "agent": "confirmation_required" },
+      "schema": {
+        "properties": {
+          "device_id": { "type": "string" },
+          "hue": { "type": "integer", "minimum": 0, "maximum": 360 },
+          "saturation": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "temperature_kelvin": { "type": "integer", "minimum": 2000, "maximum": 6500 }
+        }
+      }
+    }
+  ],
+  "views": {
+    "default": {
+      "type": "dashboard",
+      "sections": ["rooms", "scenes", "all_devices"]
+    },
+    "room": {
+      "type": "grid",
+      "columns": { "compact": 2, "medium": 3, "expanded": 4 },
+      "item_template": "device_card"
+    }
+  },
+  "schemas": {
+    "device": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "enum": ["bulb", "strip", "switch", "dimmer"] },
+        "room_id": { "type": "string" },
+        "supports_color": { "type": "boolean" },
+        "supports_dimming": { "type": "boolean" }
+      }
+    },
+    "room": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "device_ids": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "device_state": {
+      "type": "object",
+      "properties": {
+        "on": { "type": "boolean" },
+        "brightness": { "type": "integer" },
+        "hue": { "type": "integer" },
+        "saturation": { "type": "integer" },
+        "temperature_kelvin": { "type": "integer" },
+        "reachable": { "type": "boolean" }
+      }
+    }
+  },
+  "trust": {
+    "level": "verified",
+    "publisher": "Example Smart Home Inc"
+  }
+}
+

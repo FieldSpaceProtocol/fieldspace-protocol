@@ -1,0 +1,217 @@
+{
+  "fieldspace": "0.1",
+  "provider": {
+    "id": "com.example.video-feed",
+    "name": "Video Feed",
+    "description": "Personal video subscriptions and recommendations",
+    "version": "1.0.0",
+    "icon_url": "https://videos.example.com/icon.png",
+    "homepage_url": "https://videos.example.com"
+  },
+  "authentication": {
+    "required": true,
+    "methods": ["oauth2"],
+    "oauth2": {
+      "authorization_url": "https://videos.example.com/oauth/authorize",
+      "token_url": "https://videos.example.com/oauth/token",
+      "scopes": {
+        "read": "Read video library and history",
+        "write": "Manage playlists and queue",
+        "playback": "Control video playback"
+      }
+    }
+  },
+  "surfaces": ["web", "tvos", "android_tv", "ios", "android"],
+  "endpoints": {
+    "base_url": "https://api.videos.example.com",
+    "state": "/v1/state",
+    "actions": "/v1/actions"
+  },
+  "capabilities": [
+    {
+      "id": "subscriptions",
+      "type": "data",
+      "name": "Subscriptions",
+      "description": "Videos from subscribed channels",
+      "endpoint": "/v1/feeds/subscriptions",
+      "metadata": {
+        "searchable": false,
+        "sortable": true,
+        "paginated": true,
+        "refresh_interval_seconds": 300
+      },
+      "schema": {
+        "type": "array",
+        "items": { "$ref": "#/schemas/video" }
+      }
+    },
+    {
+      "id": "recommended",
+      "type": "data",
+      "name": "Recommended",
+      "description": "Personalized video recommendations",
+      "endpoint": "/v1/feeds/recommended",
+      "metadata": {
+        "paginated": true,
+        "refresh_interval_seconds": 600
+      }
+    },
+    {
+      "id": "search",
+      "type": "data",
+      "name": "Search",
+      "endpoint": "/v1/search",
+      "metadata": {
+        "searchable": true,
+        "paginated": true
+      }
+    },
+    {
+      "id": "playback_state",
+      "type": "state",
+      "name": "Playback State",
+      "endpoint": "/v1/state/playback",
+      "metadata": {
+        "refresh_interval_seconds": 1
+      },
+      "schema": {
+        "type": "object",
+        "properties": {
+          "status": { "enum": ["idle", "playing", "paused", "buffering"] },
+          "current_video_id": { "type": "string" },
+          "position_seconds": { "type": "number" },
+          "duration_seconds": { "type": "number" },
+          "volume": { "type": "number", "minimum": 0, "maximum": 100 }
+        }
+      }
+    },
+    {
+      "id": "queue_state",
+      "type": "state",
+      "name": "Queue",
+      "endpoint": "/v1/state/queue",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "array", "items": { "type": "string" } },
+          "current_index": { "type": "integer" }
+        }
+      }
+    },
+    {
+      "id": "play",
+      "type": "action",
+      "name": "Play",
+      "endpoint": "/v1/actions/play",
+      "side_effects": "local",
+      "permissions": { "user": "allowed", "agent": "allowed" },
+      "schema": {
+        "input": {
+          "properties": {
+            "video_id": { "type": "string" },
+            "start_position": { "type": "number", "default": 0 }
+          },
+          "required": ["video_id"]
+        }
+      }
+    },
+    {
+      "id": "pause",
+      "type": "action",
+      "name": "Pause",
+      "endpoint": "/v1/actions/pause",
+      "side_effects": "local",
+      "permissions": { "user": "allowed", "agent": "allowed" }
+    },
+    {
+      "id": "seek",
+      "type": "action",
+      "name": "Seek",
+      "endpoint": "/v1/actions/seek",
+      "side_effects": "local",
+      "permissions": { "user": "allowed", "agent": "allowed" },
+      "schema": {
+        "input": {
+          "properties": {
+            "position_seconds": { "type": "number" }
+          },
+          "required": ["position_seconds"]
+        }
+      }
+    },
+    {
+      "id": "next",
+      "type": "action",
+      "name": "Next",
+      "endpoint": "/v1/actions/next",
+      "side_effects": "local",
+      "permissions": { "user": "allowed", "agent": "allowed" }
+    },
+    {
+      "id": "previous",
+      "type": "action",
+      "name": "Previous",
+      "endpoint": "/v1/actions/previous",
+      "side_effects": "local",
+      "permissions": { "user": "allowed", "agent": "allowed" }
+    },
+    {
+      "id": "add_to_queue",
+      "type": "action",
+      "name": "Add to Queue",
+      "endpoint": "/v1/actions/queue/add",
+      "side_effects": "local",
+      "permissions": { "user": "allowed", "agent": "confirmation_required" },
+      "schema": {
+        "input": {
+          "properties": { "video_id": { "type": "string" } },
+          "required": ["video_id"]
+        }
+      }
+    },
+    {
+      "id": "volume",
+      "type": "control",
+      "name": "Volume",
+      "endpoint": "/v1/controls/volume",
+      "permissions": { "user": "allowed", "agent": "confirmation_required" },
+      "schema": {
+        "properties": {
+          "level": { "type": "number", "minimum": 0, "maximum": 100 },
+          "muted": { "type": "boolean" }
+        }
+      }
+    }
+  ],
+  "views": {
+    "default": {
+      "type": "grid",
+      "columns": { "compact": 1, "medium": 2, "expanded": 4, "large": 6 },
+      "item_template": "video_card"
+    },
+    "playback": {
+      "type": "fullscreen_player",
+      "controls": ["play_pause", "seek", "next_previous", "volume", "captions"]
+    },
+    "native_hints": {
+      "tvos": { "media_passthrough": "AVPlayer", "focus_style": "scale" },
+      "android_tv": { "media_passthrough": "ExoPlayer", "leanback_compatible": true }
+    }
+  },
+  "schemas": {
+    "video": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "channel": { "type": "string" },
+        "thumbnail_url": { "type": "string", "format": "uri" },
+        "duration_seconds": { "type": "integer" },
+        "view_count": { "type": "integer" },
+        "published_at": { "type": "string", "format": "date-time" },
+        "media_url": { "type": "string", "format": "uri" }
+      }
+    }
+  }
+}
+
